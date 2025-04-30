@@ -10,6 +10,9 @@ import static entity.Move.*;
 import static entity.Outcome.*;
 
 public abstract class RockScissorPaper {
+    public String getName() {
+        return "None";
+    }
 
     /**
      * 플레이어 리스트를 받고, 승자를 반환합니다. 만약 무승부 상황이 나면 아무도 반환하지 않습니다.

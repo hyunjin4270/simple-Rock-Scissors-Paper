@@ -30,6 +30,11 @@ public class GameView {
         System.out.println();
     }
 
+    public static void showPlayerTurn(String playerName) {
+        System.out.printf("[TURN] %s님의 차례입니다.%n", playerName);
+    }
+
+
     public static void showAvailableMoves(List<String> moves) {
         System.out.print("[INFO] 사용 가능한 무브: ");
         for (int i = 0; i < moves.size(); i++) {
@@ -48,12 +53,32 @@ public class GameView {
         System.out.println();
     }
 
-    public static void showGameResult(List<Player> winner) {
-        System.out.println("[RESULT] 승자: ");
+    public static void showEndMessage() {
+        System.out.println("[END] 게임 종료! 결과를 발표하겠습니다.");
+    }
+
+    public static void showWinner(List<Player> winner) {
+        System.out.println("[RESULT] 승패가 갈렸습니다!");
+        System.out.println("[RESULT] 승자:");
         for (int i = 0; i < winner.size(); i++) {
             if (i > 0) System.out.print(", ");
             System.out.print(winner.get(i).getName());
         }
         System.out.println();
+    }
+
+    public static void showDrawMessage() {
+        System.out.println("[RESULT] 무승부!");
+    }
+
+    /**
+     * 게임의 생동감을 주기 위한 딜레이입니다.
+     */
+    private void delay() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

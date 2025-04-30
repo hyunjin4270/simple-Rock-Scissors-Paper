@@ -13,14 +13,14 @@ public enum Move {
      * @return 사용자 입력값에 맞는 무브
      */
     public static Move from(String input) {
-        if (input == null || input.isBlank()) throw new IllegalArgumentException("Input cannot be empty.");
+        if (input == null || input.isBlank()) throw new IllegalArgumentException("입력 값이 빌 수 없습니다.");
         String name = input.trim().toLowerCase();
 
         return switch (name) {
             case "rock" -> ROCK;
             case "scissor" -> SCISSOR;
             case "paper" -> PAPER;
-            default -> throw new NoSuchElementException("Unknown move: " + name);
+            default -> throw new NoSuchElementException("해당하는 무브를 찾을 수 없습니다: " + name);
         };
     }
 
