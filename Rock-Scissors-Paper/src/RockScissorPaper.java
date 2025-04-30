@@ -7,7 +7,13 @@ import java.util.*;
 import static entity.Move.*;
 import static entity.Outcome.*;
 
-public class RockScissorPaper {
+public abstract class RockScissorPaper {
+
+    /**
+     * 플레이어 리스트를 받고, 승자를 반환합니다. 만약 무승부 상황이 나면 아무도 반환하지 않습니다.
+     * @param playerList 플레이어 리스트
+     * @return 승자 or 무승부 상황(null)
+     */
     public Optional<List<Player>> decideWinner(List<Player> playerList) {
         if (isDraw(playerList)) return Optional.empty();
 
@@ -31,18 +37,23 @@ public class RockScissorPaper {
         }
     }
 
-
-    private Outcome decide(Move preMove, Move sufMove) {
+    /**
+     * 2개의 무브를 비교해서 비교군 무브를 기준으로 승패를 가립니다.
+     * @param ctrlMove 비교군 무브
+     * @param expMove 대조군 무브
+     * @return 비교군 무브의 승패유무
+     */
+    private Outcome decide(Move ctrlMove, Move expMove) {
         if (
-                (preMove == ROCK   && sufMove == SCISSOR) ||
-                (preMove == SCISSOR&& sufMove == PAPER)   ||
-                (preMove == PAPER  && sufMove == ROCK)
+                (ctrlMove == ROCK   && expMove == SCISSOR) ||
+                (ctrlMove == SCISSOR&& expMove == PAPER)   ||
+                (ctrlMove == PAPER  && expMove == ROCK)
         ) {
             return WIN;
         } else if (
-                (preMove == ROCK   && sufMove == PAPER) ||
-                (preMove == SCISSOR&& sufMove == ROCK)   ||
-                (preMove == PAPER  && sufMove == SCISSOR)
+                (ctrlMove == ROCK   && expMove == PAPER) ||
+                (ctrlMove == SCISSOR&& expMove == ROCK)   ||
+                (ctrlMove == PAPER  && expMove == SCISSOR)
         ){
             return LOSE;
         } else {
@@ -50,6 +61,11 @@ public class RockScissorPaper {
         }
     }
 
+    /**
+     * 플레이어의 무브를 보고 무승부 상황인지 판별합니다.
+     * @param playerList 플레이어 리스트
+     * @return 무승부 상황 판별 값
+     */
     private boolean isDraw(List<Player> playerList) {
         Set<Move> moves = new HashSet<>();
         for (Player player : playerList) {
