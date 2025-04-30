@@ -1,3 +1,5 @@
+package rule;
+
 import entity.Move;
 import entity.Outcome;
 import entity.Player;

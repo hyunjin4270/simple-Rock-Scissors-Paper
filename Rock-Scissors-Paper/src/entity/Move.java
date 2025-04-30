@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public enum Move {
@@ -21,5 +22,9 @@ public enum Move {
             case "paper" -> PAPER;
             default -> throw new NoSuchElementException("Unknown move: " + name);
         };
+    }
+
+    public static List<String> findAll() {
+        return List.of("Rock", "Scissor", "Paper");
     }
 }
