@@ -2,9 +2,9 @@ package view;
 
 public class ConsoleViewHelper {
     public static void home() {
-        System.out.println("===============================================================");
-        System.out.println("1. 시작 | 2. 플레이어 목록 | 3. 컴퓨터 추가 | 4. 컴퓨터 삭제 | 5. 종료");
-        System.out.println("===============================================================");
+        System.out.println("==================================================================");
+        System.out.println("1. 시작 | 2. 플레이어 목록 | 3. 플레이어 추가 | 4. 플레이어 삭제 | 5. 종료");
+        System.out.println("==================================================================");
     }
 
     public static void userPrompt(String name) {

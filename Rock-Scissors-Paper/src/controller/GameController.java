@@ -54,8 +54,9 @@ public class GameController {
                 continue;
             }
 
-            player.setMove(playPlayerTurn(scanner, player));
-
+            Move move = playPlayerTurn(scanner, player);
+            player.setMove(move);
+            showMoveAccepted(player.getName(), move.name());
         }
     }
 
