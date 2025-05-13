@@ -115,6 +115,4 @@ public class GameController {
         userPrompt(name);
         return scanner.nextLine().trim().toLowerCase();
     }
-
-
 }
