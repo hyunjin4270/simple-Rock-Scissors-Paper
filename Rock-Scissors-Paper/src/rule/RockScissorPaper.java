@@ -2,6 +2,7 @@ package rule;
 
 import entity.Move;
 import entity.Outcome;
+import entity.PlayContext;
 import entity.Player;
 
 import java.util.*;
@@ -14,10 +15,10 @@ public abstract class RockScissorPaper {
 
     /**
      * 플레이어 리스트를 받고, 승자를 반환합니다. 만약 무승부 상황이 나면 아무도 반환하지 않습니다.
-     * @param playerList 플레이어 리스트
+     * @param playContext 플레이어 정보
      * @return 승자 or 무승부 상황(null)
      */
-    public abstract Optional<List<Player>> decideWinner(List<Player> playerList);
+    public abstract Optional<List<Player>> play(PlayContext playContext);
 
 
 
@@ -50,11 +51,8 @@ public abstract class RockScissorPaper {
      * @param playerList 플레이어 리스트
      * @return 무승부 상황 판별 값
      */
-    protected boolean isDraw(List<Player> playerList) {
-        Set<Move> moves = new HashSet<>();
-        for (Player player : playerList) {
-            moves.add(player.getMove());
-        }
+    protected boolean isDraw(Map<Player, Move> playerList) {
+        Set<Move> moves = new HashSet<>(playerList.values());
         if (moves.size() != 2) return true;
         return false;
     }

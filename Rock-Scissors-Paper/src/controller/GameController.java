@@ -24,8 +24,7 @@ public class GameController {
         game = selectRule(scanner);
 
         //게임 시작
-        showWelcome();
-        showAppliedConfig(game.getName(), players);
+
 
         //게임 진행
         advanceTurn(scanner, players);
@@ -36,7 +35,7 @@ public class GameController {
 
     private void endGame(List<Player> players) {
         showEndMessage();
-        Optional<List<Player>> playerGroup = game.decideWinner(players);
+        Optional<List<Player>> playerGroup = game.play(players);
         if (playerGroup.isEmpty()) {
             showDrawMessage();
         } else {

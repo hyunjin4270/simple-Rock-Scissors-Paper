@@ -57,7 +57,7 @@ public class Main {
             Player newPlayer;
             switch (type) {
                 case "computer" -> newPlayer = new Computer(name);
-                case "user"     -> newPlayer = new User(name);
+                case "user" -> newPlayer = new User(name);
                 default -> {
                     showError("알 수 없는 플레이어 타입입니다: " + parts[0]);
                     continue;

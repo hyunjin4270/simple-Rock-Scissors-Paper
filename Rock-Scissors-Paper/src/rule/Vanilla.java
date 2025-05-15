@@ -2,6 +2,7 @@ package rule;
 
 import entity.Move;
 import entity.Outcome;
+import entity.PlayContext;
 import entity.Player;
 
 import java.util.*;
@@ -18,23 +19,35 @@ public class Vanilla extends RockScissorPaper {
 
 
     @Override
-    public Optional<List<Player>> decideWinner(List<Player> playerList) {
-        if (isDraw(playerList)) return Optional.empty();
+    public Optional<List<Player>> play(PlayContext context) {
+        Map<Player, Move> players = context.getMoves();
+        if (isDraw(players)) {
+            return Optional.empty();
+        }
 
-        List<Player> groupA = new LinkedList<>();
-        List<Player> groupB = new LinkedList<>();
+        LinkedList<Player> groupA = new LinkedList<>();
+        LinkedList<Player> groupB = new LinkedList<>();
+
+        List<Player> playerList = new ArrayList<>(players.keySet());
         Player ctrlPlayer = playerList.getFirst();
         groupA.add(ctrlPlayer);
+
         for (Player expPlayer : playerList) {
             if (expPlayer.equals(ctrlPlayer)) continue;
-            if (decide(ctrlPlayer.getMove(), expPlayer.getMove()) == DRAW) {
+            Move ctrlMove = players.get(ctrlPlayer);
+            Move expMove  = players.get(expPlayer);
+
+            if (decide(ctrlMove, expMove) == DRAW) {
                 groupA.add(expPlayer);
             } else {
                 groupB.add(expPlayer);
             }
         }
 
-        if (decide(groupA.getFirst().getMove(), groupB.getFirst().getMove()) == WIN) {
+        Move firstA = players.get(groupA.getFirst());
+        Move firstB = players.get(groupB.getFirst());
+
+        if (decide(firstA, firstB) == WIN) {
             return Optional.of(groupA);
         } else {
             return Optional.of(groupB);
