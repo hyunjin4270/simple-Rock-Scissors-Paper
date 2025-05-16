@@ -38,13 +38,7 @@ public class Mukchippa extends RockScissorPaper {
         return Optional.of(defenders);
     }
 
-    /**
-     * 만약 공격자를 이기는 행동을 취한 수비자가 다수일 때 사용하는 포인트입니다.
-     * @return 1부터 20까지 랜덤한 숫자
-     */
-    public int getAttackerPoint() {
-        return rand.nextInt(20) + 1;
-    }
+
 
     /**
      * 플레이어들의 주사위 눈금 중 가장 큰 눈금을 가진 플레이어를 반환합니다.

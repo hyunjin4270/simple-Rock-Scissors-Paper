@@ -3,8 +3,10 @@ package controller;
 import entity.Computer;
 import entity.Move;
 import entity.Player;
+import entity.User;
 import rule.RockScissorPaper;
 import rule.Vanilla;
+import view.GameView;
 
 import java.util.*;
 
@@ -15,87 +17,36 @@ public class GameController {
     private final List<String> rules = List.of(
             "vanilla"
     );
-    private RockScissorPaper game;
-    private final List<String> MOVE_NAMES = Move.findAll();
-    private final Random random = new Random();
-
-    public void gameStart(Scanner scanner, List<Player> players) {
+    private final Scanner scanner;
+    private GameFlow game;
+    private final List<Player> players = new ArrayList<>(List.of(
+            new User("User1"),
+            new Computer("Computer1")
+    ));
+    public void gameStart() {
         //준비작업
-        game = selectRule(scanner);
-
-        //게임 시작
-
-
-        //게임 진행
-        advanceTurn(scanner, players);
-
-        //게임 종료
-        endGame(players);
+        GameFlow game = selectRule();
+        game.run();
     }
 
-    private void endGame(List<Player> players) {
-        showEndMessage();
-        Optional<List<Player>> playerGroup = game.play(players);
-        if (playerGroup.isEmpty()) {
-            showDrawMessage();
-        } else {
-            showWinner(playerGroup.get());
-        }
+
+    public GameController(Scanner scanner) {
+        this.scanner = scanner;
     }
-
-    private void advanceTurn(Scanner scanner, List<Player> players) {
-        for (Player player : players) {
-            showPlayerTurn(player.getName());
-
-            if (player instanceof Computer) {
-                player.setMove(playComputerTurn());
-                promptComputerMove(player.getName());
-                continue;
-            }
-
-            Move move = playPlayerTurn(scanner, player);
-            player.setMove(move);
-            showMoveAccepted(player.getName(), move.name());
-        }
-    }
-
-    private Move playPlayerTurn(Scanner scanner, Player player) {
-        showAvailableMoves(MOVE_NAMES);
-        while (true) {
-            String input = playerInput(scanner, player.getName());
-            try {
-                return Move.from(input);
-            } catch (RuntimeException e) {
-                showError(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 랜덤한 무브를 선택하는 기능입니다.
-     * @return 랜덤 무브
-     */
-    private Move playComputerTurn() {
-        int idx = random.nextInt(MOVE_NAMES.size());
-        String name = MOVE_NAMES.get(idx);
-        return Move.from(name);
-    }
-
 
     /**
      * 게임에 진입하기 전 적용할 규칙을 설정합니다.
-     * @param scanner 입력 도구
      * @return 규칙
      */
-    private RockScissorPaper selectRule(Scanner scanner) {
+    private GameFlow selectRule() {
         showRuleList(rules);
         while (true) {
-            String input = playerInput(scanner, "host");
+            String input = playerInput("host");
             try {
                 if (input.isBlank()) throw new IllegalArgumentException("입력값이 빌 수 없습니다.");
                 if (!rules.contains(input)) throw new NoSuchElementException("해당하는 룰이 없습니다: " + input);
                 return switch (input) {
-                    case "vanilla" -> new Vanilla();
+                    case "vanilla" -> new VanillaEngine(players, scanner);
                     default -> throw new NoSuchElementException("알 수 없는 상황이 발생했습니다.");
                 };
             } catch (RuntimeException e) {
@@ -104,14 +55,93 @@ public class GameController {
         }
     }
 
+    public void addPlayer() {
+        System.out.println("[ADD] 플레이어 타입과 이름을 적으십시오.");
+        System.out.println("사용가능한 플레이어 타입: Computer, User");
+        System.out.println("예시: computer 챗지피티");
+        System.out.println("나가기: exit");
+        while (true) {
+            String input = playerInput("host");
+            if (input.equals("exit")) {
+                return;
+            }
+
+            String[] parts = input.split(" ", 2);
+            if (parts.length < 2) {
+                showError("형식이 올바르지 않습니다. (예: computer 챗지피티)");
+                continue;
+            }
+            String type = parts[0];
+            String name = parts[1];
+            if (name.isBlank()) {
+                showError("플레이어 이름은 빈 문자열일 수 없습니다.");
+                continue;
+            }
+            Player newPlayer;
+            switch (type) {
+                case "computer" -> newPlayer = new Computer(name);
+                case "user" -> newPlayer = new User(name);
+                default -> {
+                    showError("알 수 없는 플레이어 타입입니다: " + parts[0]);
+                    continue;
+                }
+            }
+            players.add(newPlayer);
+            System.out.printf("[ADD] 플레이어가 추가되었습니다: %s (%s)", name, type);
+            System.out.println();
+            return;
+        }
+    }
+
+    public void deletePlayer() {
+        System.out.println("[DELETE] 플레이어 이름을 적으십시오.");
+        printPlayerList();
+        System.out.println("나가기: exit");
+        while (true) {
+            String input = playerInput("host");
+            if (input.equals("exit")) {
+                return;
+            }
+            if (input.isBlank()) {
+                showError("입력 값은 빈 문자열일 수 없습니다.");
+                continue;
+            }
+
+            Player target = null;
+            for (Player player : players) {
+                if (!player.getName().equals(input)) continue;
+                target = player;
+                break;
+            }
+
+            if (target == null) {
+                showError("해당 플레이어를 찾을 수 없습니다: " + input);
+                continue;
+            }
+
+            // 삭제
+            players.remove(target);
+            System.out.println("[DELETE] 플레이어가 삭제되었습니다: " + target.getName());
+            return;
+        }
+    }
+
+    public void printPlayerList() {
+        for (Player player : players) {
+            System.out.print(" - ");
+            System.out.println(player.getName());
+        }
+    }
+
     /**
      * 플레이어의 입출력을 묶은 편의성 메서드입니다.
-     * @param scanner 입력 도구
      * @param name 플레이어의 이름
      * @return 플레이어의 입력
      */
-    private String playerInput(Scanner scanner, String name) {
+    private String playerInput(String name) {
         userPrompt(name);
         return scanner.nextLine().trim().toLowerCase();
     }
+
+
 }

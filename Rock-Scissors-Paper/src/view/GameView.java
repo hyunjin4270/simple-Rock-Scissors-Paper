@@ -2,6 +2,7 @@ package view;
 
 import entity.Player;
 import java.util.List;
+import java.util.Map;
 
 public class GameView {
     /** 짧은 인터랙션 딜레이: 400ms */
@@ -16,7 +17,7 @@ public class GameView {
 
     /** 긴장감 딜레이: 1000ms */
     private static void suspenseDelay() {
-        try { Thread.sleep(1000); } catch (InterruptedException e) { throw new RuntimeException(e); }
+        try { Thread.sleep(1300); } catch (InterruptedException e) { throw new RuntimeException(e); }
     }
 
     public static void showWelcome() {
@@ -50,8 +51,29 @@ public class GameView {
         normalDelay();
     }
 
+    public static void showAttacker(String playerName) {
+        System.out.printf("[ATTACKER] 현재 공격자는 %s님 입니다!\n", playerName);
+        normalDelay();
+    }
+
+    public static void showRoundCount(int roundNumber) {
+        System.out.printf("=== Round %d ===\n");
+        suspenseDelay();
+    }
+
+    public static void rollDice(Map<Player, Integer> players) {
+        System.out.println("=== 주사위가 굴러갑니다! ===");
+        normalDelay();
+        for (Player player : players.keySet()) {
+            System.out.printf("%9s - %d", player.getName(), players.get(player));
+            shortDelay();
+            System.out.println();
+        }
+        suspenseDelay();
+    }
+
     public static void showPlayerTurn(String playerName) {
-        System.out.printf("[TURN] %s님의 차례입니다.%n", playerName);
+        System.out.printf("[TURN] %s님의 차례입니다. \n", playerName);
         shortDelay();
     }
 
@@ -77,13 +99,11 @@ public class GameView {
     }
 
     public static void showEndMessage() {
-        System.out.println("[END] 게임 종료! 결과를 발표하겠습니다.");
+        System.out.println("[END] 게임 종료!");
         suspenseDelay();
     }
 
     public static void showWinner(List<Player> winner) {
-        System.out.println("[RESULT] 승패가 갈렸습니다!");
-        suspenseDelay();
         System.out.print("[RESULT] 승자: ");
         for (int i = 0; i < winner.size(); i++) {
             if (i > 0) System.out.print(", ");
@@ -92,6 +112,16 @@ public class GameView {
         }
         System.out.println();
         suspenseDelay();
+    }
+
+    public static void showStatus(Map<Player, String> status) {
+        System.out.println("=== 결과 ===");
+        for (Map.Entry<Player, String> entry : status.entrySet()) {
+            System.out.print(entry.getKey().getName());
+            System.out.print(" : ");
+            System.out.println(entry.getValue());
+            shortDelay();
+        }
     }
 
     public static void showDrawMessage() {

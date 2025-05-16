@@ -17,10 +17,24 @@ public enum Move {
         String name = input.trim().toLowerCase();
 
         return switch (name) {
-            case "rock" -> ROCK;
-            case "scissor" -> SCISSOR;
-            case "paper" -> PAPER;
-            default -> throw new NoSuchElementException("해당하는 무브를 찾을 수 없습니다: " + name);
+            case "rock"     -> ROCK;
+            case "scissor"  -> SCISSOR;
+            case "paper"    -> PAPER;
+            default         -> throw new NoSuchElementException("해당하는 무브를 찾을 수 없습니다: " + name);
+        };
+    }
+
+    /**
+     * 행동에 대응하는 문자열을 반환합니다.
+     * @param move 문자열을 얻고자 하는 행동
+     * @return 문자열 행동
+     */
+    public static String asString(Move move) {
+        if (move == null) throw new IllegalArgumentException("Move는 null일 수 없습니다.");
+        return switch (move) {
+            case ROCK   -> "rock";
+            case SCISSOR-> "scissor";
+            case PAPER  -> "paper";
         };
     }
 
