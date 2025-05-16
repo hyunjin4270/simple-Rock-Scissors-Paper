@@ -1,26 +1,30 @@
 package entity;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class PlayContext {
-    private final Map<Player, Move> moves;
+    private final Map<Player, Move> moves = new HashMap<>();
     private final Player attacker;
     private final int roundNumber;
 
-    public PlayContext(Map<Player, Move> moves, Player attacker, int roundNumber) {
-        this.moves = Objects.requireNonNull(moves, "moves must not be null");
+    public PlayContext(Player attacker, int roundNumber) {
         this.attacker = attacker;
         this.roundNumber = roundNumber;
     }
 
 
-    public PlayContext(Map<Player, Move> moves) {
-        this(moves, null, 0);
+    public PlayContext() {
+        this(null, 0);
     }
 
     public Map<Player, Move> getMoves() {
         return moves;
+    }
+
+    public void put(Player player, Move move) {
+        moves.put(player, move);
     }
 
     public Player getAttacker() {

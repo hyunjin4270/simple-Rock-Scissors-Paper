@@ -15,7 +15,8 @@ import static view.GameView.*;
 
 public class GameController {
     private final List<String> rules = List.of(
-            "vanilla"
+            "vanilla",
+            "mukchippa"
     );
     private final Scanner scanner;
     private GameFlow game;
@@ -23,6 +24,10 @@ public class GameController {
             new User("User1"),
             new Computer("Computer1")
     ));
+
+    public GameController(Scanner scanner) {
+        this.scanner = scanner;
+    }
     public void gameStart() {
         //준비작업
         GameFlow game = selectRule();
@@ -30,9 +35,7 @@ public class GameController {
     }
 
 
-    public GameController(Scanner scanner) {
-        this.scanner = scanner;
-    }
+
 
     /**
      * 게임에 진입하기 전 적용할 규칙을 설정합니다.
@@ -46,7 +49,8 @@ public class GameController {
                 if (input.isBlank()) throw new IllegalArgumentException("입력값이 빌 수 없습니다.");
                 if (!rules.contains(input)) throw new NoSuchElementException("해당하는 룰이 없습니다: " + input);
                 return switch (input) {
-                    case "vanilla" -> new VanillaEngine(players, scanner);
+                    case "vanilla"      -> new VanillaEngine(players, scanner);
+                    case "mukchippa"    -> new MukchippaEngine(players, scanner);
                     default -> throw new NoSuchElementException("알 수 없는 상황이 발생했습니다.");
                 };
             } catch (RuntimeException e) {
@@ -55,6 +59,11 @@ public class GameController {
         }
     }
 
+
+    /**
+     * 플레이어를 추가합니다. 컴퓨터와 일반 유저 중 고를 수 있습니다.
+     * exit 명령어를 통해 플레이어를 추가하지 않고 나갈 수 있습니다
+     */
     public void addPlayer() {
         System.out.println("[ADD] 플레이어 타입과 이름을 적으십시오.");
         System.out.println("사용가능한 플레이어 타입: Computer, User");
@@ -77,6 +86,9 @@ public class GameController {
                 showError("플레이어 이름은 빈 문자열일 수 없습니다.");
                 continue;
             }
+            if (name.length() > 9) {
+                showError("플레이어 이름은 10글자 이상이 될 수 없습니다.");
+            }
             Player newPlayer;
             switch (type) {
                 case "computer" -> newPlayer = new Computer(name);
@@ -93,6 +105,10 @@ public class GameController {
         }
     }
 
+    /**
+     * 플레이어를 삭제합니다.
+     * exit 명령어를 통해 삭제하지 않고 나갈 수 있습니다.
+     */
     public void deletePlayer() {
         System.out.println("[DELETE] 플레이어 이름을 적으십시오.");
         printPlayerList();
@@ -126,6 +142,9 @@ public class GameController {
         }
     }
 
+    /**
+     * 현재 존재하는 플레이어 목록을 보여줍니다
+     */
     public void printPlayerList() {
         for (Player player : players) {
             System.out.print(" - ");

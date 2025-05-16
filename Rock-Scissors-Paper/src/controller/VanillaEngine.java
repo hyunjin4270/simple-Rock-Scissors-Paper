@@ -27,18 +27,19 @@ public class VanillaEngine extends GameFlow {
 
     @Override
     protected RoundResult doRound() {
-        Map<Player, Move> behavior = new HashMap<>();
-        for (Player player : players) {
+        PlayContext playContext = new PlayContext();
+        for (Player player : getPlayers()) {
+            showPlayerTurn(player.getName());
             if (player instanceof Computer) {
-                behavior.put(player, playComputerTurn());
+                playContext.put(player, playComputerTurn());
                 promptComputerMove(player.getName());
                 continue;
             }
-            behavior.put(player, playPlayerTurn(getScanner(), player));
+            playContext.put(player, playPlayerTurn(getScanner(), player));
         }
 
-        Map<Player, String> status = makeStatus(behavior);
-        return rule.play(new PlayContext(behavior))
+        Map<Player, String> status = makeStatus(playContext.getMoves());
+        return rule.play(playContext)
                 .map(winners -> RoundResult.winners(winners, status))
                 .orElseGet(() -> RoundResult.draw(status));
     }
@@ -46,7 +47,9 @@ public class VanillaEngine extends GameFlow {
     private Map<Player, String> makeStatus(Map<Player, Move> behavior) {
         Map<Player, String> status = new HashMap<>();
         for (Map.Entry<Player, Move> entry : behavior.entrySet()) {
-            status.put(entry.getKey(), Move.asString(entry.getValue()));
+            status.put(entry.getKey(),
+                    Move.asString(entry.getValue()));
+
         }
         return status;
     }

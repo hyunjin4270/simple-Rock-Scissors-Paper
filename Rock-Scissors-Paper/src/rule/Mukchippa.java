@@ -1,6 +1,7 @@
 package rule;
 
 import entity.Move;
+import entity.Outcome;
 import entity.PlayContext;
 import entity.Player;
 
@@ -38,7 +39,26 @@ public class Mukchippa extends RockScissorPaper {
         return Optional.of(defenders);
     }
 
+    /**
+     * 공격자의 행동을 이긴 수비자 목록을 반환한다.
+     *
+     * @param playContext 해당 라운드 정보
+     * @return 공격자를 이긴 수비자 리스트
+     */
+    public List<Player> findDefendersWhoBeatAttacker(PlayContext playContext) {
+        Map<Player, Move> moves = playContext.getMoves();
+        Move attMove = moves.get(playContext.getAttacker());
 
+        List<Player> attackerCandidate = new ArrayList<>();
+        for (Player p : moves.keySet()) {
+            if (p.equals(playContext.getAttacker())) continue;
+            Move defMove = moves.get(p);
+            if (decide(attMove, defMove) == Outcome.LOSE) {
+                attackerCandidate.add(p);
+            }
+        }
+        return attackerCandidate;
+    }
 
     /**
      * 플레이어들의 주사위 눈금 중 가장 큰 눈금을 가진 플레이어를 반환합니다.
