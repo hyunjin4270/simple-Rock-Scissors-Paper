@@ -1,18 +1,17 @@
 package controller;
 
-import entity.Computer;
-import entity.Move;
-import entity.PlayContext;
-import entity.Player;
+import dto.GameResult;
+import dto.RoundResult;
+import entity.*;
 import rule.Vanilla;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static view.GameView.*;
 
+/**
+ * 기본적인 가위바위보 게임을 진행하는 클래스입니다.
+ */
 public class VanillaEngine extends GameFlow {
     private final Vanilla rule = new Vanilla();
 
@@ -26,30 +25,36 @@ public class VanillaEngine extends GameFlow {
     }
 
     @Override
-    protected RoundResult doRound() {
-        PlayContext playContext = new PlayContext();
+    protected GameResult doRound() {
+        Map<Player, Move> moves = new HashMap<>();
         for (Player player : getPlayers()) {
             showPlayerTurn(player.getName());
+            Move move;
             if (player instanceof Computer) {
-                playContext.put(player, playComputerTurn());
+                move = playComputerTurn();
                 promptComputerMove(player.getName());
-                continue;
             }
-            playContext.put(player, playPlayerTurn(getScanner(), player));
+            else if (player instanceof User) {
+                move = playUserTurn(getScanner(), player);
+                showMoveAccepted(player.getName(), move.name());
+            }
+            else {
+                throw new NoSuchElementException("찾을 수 없는 플레이어 타입입니다.");
+            }
+            moves.put(player, move);
         }
 
-        Map<Player, String> status = makeStatus(playContext.getMoves());
-        return rule.play(playContext)
-                .map(winners -> RoundResult.winners(winners, status))
-                .orElseGet(() -> RoundResult.draw(status));
+        RoundResult result = RoundResult.of(moves, null, 1);
+        Map<Player, String> status = makeStatus(result.getMoves());
+        return rule.play(result)
+                .map(winners -> GameResult.winners(winners, status))
+                .orElseGet(() -> GameResult.draw(status));
     }
 
     private Map<Player, String> makeStatus(Map<Player, Move> behavior) {
         Map<Player, String> status = new HashMap<>();
         for (Map.Entry<Player, Move> entry : behavior.entrySet()) {
-            status.put(entry.getKey(),
-                    Move.asString(entry.getValue()));
-
+            status.put(entry.getKey(), entry.getValue().name());
         }
         return status;
     }

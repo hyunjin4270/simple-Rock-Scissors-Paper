@@ -2,7 +2,7 @@ package rule;
 
 import entity.Move;
 import entity.Outcome;
-import entity.PlayContext;
+import dto.RoundResult;
 import entity.Player;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class Mukchippa extends RockScissorPaper {
      * @return 행동을 다르게 취한 수비자들
      */
     @Override
-    public Optional<List<Player>> play(PlayContext context) {
+    public Optional<List<Player>> play(RoundResult context) {
         Player attacker = context.getAttacker();
         if (attacker == null) throw new IllegalArgumentException("공격자가 반드시 필요합니다.");
 
@@ -42,16 +42,16 @@ public class Mukchippa extends RockScissorPaper {
     /**
      * 공격자의 행동을 이긴 수비자 목록을 반환한다.
      *
-     * @param playContext 해당 라운드 정보
+     * @param roundResult 해당 라운드 정보
      * @return 공격자를 이긴 수비자 리스트
      */
-    public List<Player> findDefendersWhoBeatAttacker(PlayContext playContext) {
-        Map<Player, Move> moves = playContext.getMoves();
-        Move attMove = moves.get(playContext.getAttacker());
+    public List<Player> findDefendersWhoBeatAttacker(RoundResult roundResult) {
+        Map<Player, Move> moves = roundResult.getMoves();
+        Move attMove = moves.get(roundResult.getAttacker());
 
         List<Player> attackerCandidate = new ArrayList<>();
         for (Player p : moves.keySet()) {
-            if (p.equals(playContext.getAttacker())) continue;
+            if (p.equals(roundResult.getAttacker())) continue;
             Move defMove = moves.get(p);
             if (decide(attMove, defMove) == Outcome.LOSE) {
                 attackerCandidate.add(p);

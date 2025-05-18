@@ -1,4 +1,4 @@
-import controller.GameController;
+import controller.Controller;
 
 import java.util.Scanner;
 
@@ -6,16 +6,16 @@ import static view.ConsoleViewHelper.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final GameController gameController = new GameController(scanner);
+    private static final Controller CONTROLLER = new Controller(scanner);
     public static void main(String[] args) {
         while (true) {
             home();
             String input = playerInput();
             switch (input) {
-                case "1" -> gameController.gameStart();
-                case "2" -> gameController.printPlayerList();
-                case "3" -> gameController.addPlayer();
-                case "4" -> gameController.deletePlayer();
+                case "1" -> CONTROLLER.gameStart();
+                case "2" -> CONTROLLER.printPlayerList();
+                case "3" -> CONTROLLER.addPlayer();
+                case "4" -> CONTROLLER.deletePlayer();
                 case "5" -> System.exit(0);
                 default -> showError("잘못된 입력입니다.");
             }

@@ -2,7 +2,7 @@ package rule;
 
 import entity.Move;
 import entity.Outcome;
-import entity.PlayContext;
+import dto.RoundResult;
 import entity.Player;
 
 import java.util.*;
@@ -15,10 +15,10 @@ public abstract class RockScissorPaper {
 
     /**
      * 플레이어 리스트를 받고, 승자를 반환합니다. 만약 무승부 상황이 나면 아무도 반환하지 않습니다.
-     * @param playContext 플레이어 정보
+     * @param roundResult 플레이어 정보
      * @return 승자 or 무승부 상황(null)
      */
-    public abstract Optional<List<Player>> play(PlayContext playContext);
+    public abstract Optional<List<Player>> play(RoundResult roundResult);
 
 
 

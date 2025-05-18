@@ -6,43 +6,11 @@ import entity.Player;
 import java.util.List;
 import java.util.Map;
 
+import static util.Delay.*;
+
 public class GameView {
 
-    /** 짧은 인터랙션 딜레이: 400ms */
-    private static void shortDelay() {
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    /** 일반 딜레이: 700ms */
-    private static void normalDelay() {
-        try {
-            Thread.sleep(700);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /** 컴퓨터 사고 딜레이: 1000ms */
-    private static void thinkingDelay() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /** 긴장감 딜레이: 1800ms */
-    private static void suspenseDelay() {
-        try {
-            Thread.sleep(1800);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     public static void showWelcome() {
@@ -116,6 +84,22 @@ public class GameView {
         suspenseDelay();
     }
 
+    /**
+     * 이번 라운드에 탈락된 플레이어 목록을 출력한다.
+     *
+     * @param round      현재 라운드 번호
+     * @param eliminated 탈락된 플레이어 리스트
+     */
+    public static void showEliminated(int round, List<Player> eliminated) {
+        System.out.println();
+        System.out.print("[ELIMINATED] " + round + "라운드 탈락: ");
+        for (int i = 0; i < eliminated.size(); i++) {
+            if (i > 0) System.out.print(", ");
+            System.out.print(eliminated.get(i).getName());
+        }
+        System.out.println();
+        normalDelay();
+    }
 
     public static void showPlayerTurn(String playerName) {
         System.out.println();

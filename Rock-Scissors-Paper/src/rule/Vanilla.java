@@ -1,13 +1,11 @@
 package rule;
 
 import entity.Move;
-import entity.Outcome;
-import entity.PlayContext;
+import dto.RoundResult;
 import entity.Player;
 
 import java.util.*;
 
-import static entity.Move.*;
 import static entity.Outcome.*;
 import static entity.Outcome.DRAW;
 
@@ -19,7 +17,7 @@ public class Vanilla extends RockScissorPaper {
 
 
     @Override
-    public Optional<List<Player>> play(PlayContext context) {
+    public Optional<List<Player>> play(RoundResult context) {
         Map<Player, Move> players = context.getMoves();
         if (isDraw(players)) {
             return Optional.empty();

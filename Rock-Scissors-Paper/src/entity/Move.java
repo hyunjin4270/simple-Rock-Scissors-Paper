@@ -24,20 +24,6 @@ public enum Move {
         };
     }
 
-    /**
-     * 행동에 대응하는 문자열을 반환합니다.
-     * @param move 문자열을 얻고자 하는 행동
-     * @return 문자열 행동
-     */
-    public static String asString(Move move) {
-        if (move == null) throw new IllegalArgumentException("Move는 null일 수 없습니다.");
-        return switch (move) {
-            case ROCK   -> "rock";
-            case SCISSOR-> "scissor";
-            case PAPER  -> "paper";
-        };
-    }
-
     public static List<String> findAll() {
         return List.of("Rock", "Scissor", "Paper");
     }
