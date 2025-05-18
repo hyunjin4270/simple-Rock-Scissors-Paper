@@ -9,6 +9,9 @@ import java.util.*;
 import static entity.Outcome.*;
 import static entity.Outcome.DRAW;
 
+/**
+ * 기본적인 가위바위보 로직을 담은 클래스입니다.
+ */
 public class Vanilla extends RockScissorPaper {
     @Override
     public String getName() {

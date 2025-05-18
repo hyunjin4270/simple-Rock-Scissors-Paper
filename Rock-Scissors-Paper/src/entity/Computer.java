@@ -1,6 +1,6 @@
 package entity;
 
-public class Computer implements Player{
+public class Computer implements Player {
     private final String name;
     private Move move;
 

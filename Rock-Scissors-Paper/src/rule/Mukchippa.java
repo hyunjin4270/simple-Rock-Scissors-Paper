@@ -7,8 +7,10 @@ import entity.Player;
 
 import java.util.*;
 
+/**
+ * 묵찌빠의 게임로직을 담은 클래스입니다
+ */
 public class Mukchippa extends RockScissorPaper {
-    private static final Random rand = new Random();
 
     @Override
     public String getName() {
