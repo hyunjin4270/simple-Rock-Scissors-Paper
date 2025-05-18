@@ -1,4 +1,4 @@
-package controller;
+package flow;
 
 import dto.GameResult;
 import entity.Move;

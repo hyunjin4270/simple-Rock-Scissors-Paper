@@ -1,4 +1,4 @@
-import controller.HomeFlow;
+import flow.HomeFlow;
 
 import java.util.Scanner;
 

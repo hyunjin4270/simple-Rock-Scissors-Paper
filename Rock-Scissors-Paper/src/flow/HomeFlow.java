@@ -1,4 +1,4 @@
-package controller;
+package flow;
 
 import entity.Computer;
 import entity.Player;
