@@ -22,7 +22,7 @@ public class GameView {
 
     public static void showRuleList(List<String> list) {
         System.out.println();
-        System.out.println("플레이할 룰을 선택하세요:");
+        System.out.println("플레이할 룰을 선택하세요 :");
         for (String ruleName : list) {
             System.out.println("  - " + ruleName);
         }

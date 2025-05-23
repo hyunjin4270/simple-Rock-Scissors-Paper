@@ -79,7 +79,7 @@ public class MukchippaEngine extends GameFlow {
         List<Player> beaters = rule.findDefendersWhoBeatAttacker(result);
         if (beaters.isEmpty()) {
         } else if (beaters.size() == 1) {
-            attacker = beaters.getFirst();
+            attacker = beaters.get(0);
         } else {
             attacker = selectAttacker(beaters);
         }
@@ -146,7 +146,7 @@ public class MukchippaEngine extends GameFlow {
 
             List<Player> top = rule.defineAttacker(dice);
             if (top.size() == 1) {
-                return top.getFirst();
+                return top.get(0);
             }
             showTieBreaker(top);
             candidates = top;

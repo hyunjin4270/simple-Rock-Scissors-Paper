@@ -30,7 +30,7 @@ public class Vanilla extends RockScissorPaper {
         LinkedList<Player> groupB = new LinkedList<>();
 
         List<Player> playerList = new ArrayList<>(players.keySet());
-        Player ctrlPlayer = playerList.getFirst();
+        Player ctrlPlayer = playerList.get(0);
         groupA.add(ctrlPlayer);
 
         for (Player expPlayer : playerList) {
@@ -45,8 +45,8 @@ public class Vanilla extends RockScissorPaper {
             }
         }
 
-        Move firstA = players.get(groupA.getFirst());
-        Move firstB = players.get(groupB.getFirst());
+        Move firstA = players.get(groupA.get(0));
+        Move firstB = players.get(groupB.get(0));
 
         if (decide(firstA, firstB) == WIN) {
             return Optional.of(groupA);

@@ -16,8 +16,8 @@ import static view.HomeView.*;
  */
 public class HomeFlow {
     private final List<String> rules = List.of(
-            "vanilla",
-            "mukchippa"
+            "Vanilla",
+            "Mukchippa"
     );
     private final Scanner scanner;
     private final List<Player> players = new ArrayList<>(List.of(
@@ -33,8 +33,14 @@ public class HomeFlow {
      * 게임세션을 생성합니다.
      */
     public void gameStart() {
-        GameFlow game = selectRule();
-        game.run();
+        try {
+            if (players.isEmpty()) throw new NoSuchElementException("플레이어가 없습니다.");
+            if (rules.isEmpty()) throw new NoSuchElementException("적용될 게임이 없습니다.");
+            GameFlow game = selectRule();
+            game.run();
+        } catch (NoSuchElementException e) {
+            showError(e.getMessage());
+        }
     }
 
 
@@ -50,11 +56,10 @@ public class HomeFlow {
             String input = playerInput();
             try {
                 if (input.isBlank()) throw new IllegalArgumentException("입력값이 빌 수 없습니다.");
-                if (!rules.contains(input)) throw new NoSuchElementException("해당하는 룰이 없습니다: " + input);
-                return switch (input) {
+                return switch (input.toLowerCase()) {
                     case "vanilla"      -> new VanillaEngine(players, scanner);
                     case "mukchippa"    -> new MukchippaEngine(players, scanner);
-                    default -> throw new NoSuchElementException("알 수 없는 상황이 발생했습니다.");
+                    default -> throw new NoSuchElementException("해당하는 룰이 없습니다: " + input);
                 };
             } catch (RuntimeException e) {
                 showError(e.getMessage());
@@ -81,7 +86,7 @@ public class HomeFlow {
                 String name = parts[1];
                 if (name.isBlank()) throw new IllegalArgumentException("플레이어 이름은 빈 문자열일 수 없습니다.");
                 for (Player player : players) {
-                    if (name.equals(player.getName())) throw new IllegalArgumentException("중복되는 플레이어 이름이 있습니다.");
+                    if (name.equalsIgnoreCase(player.getName())) throw new IllegalArgumentException("중복되는 플레이어 이름이 있습니다.");
                 }
                 if (name.length() > 9) throw new IllegalArgumentException("플레이어 이름은 10글자 이상이 될 수 없습니다.");
 
@@ -107,6 +112,10 @@ public class HomeFlow {
      * exit 명령어를 통해 삭제하지 않고 나갈 수 있습니다.
      */
     public void deletePlayer() {
+        if (players.isEmpty()) {
+            showError("플레이어가 없습니다.");
+            return;
+        }
         printDeleteInstructions(players);
         while (true) {
             try {
@@ -132,6 +141,10 @@ public class HomeFlow {
      * 현재 존재하는 플레이어 목록을 보여줍니다
      */
     public void printPlayerList() {
+        if (players.isEmpty()) {
+            showError("플레이어가 없습니다.");
+            return;
+        }
         for (Player player : players) {
             System.out.print(" - ");
             System.out.println(player.getName());
@@ -146,6 +159,6 @@ public class HomeFlow {
      */
     private String playerInput() {
         userPrompt("host");
-        return scanner.nextLine().trim().toLowerCase();
+        return scanner.nextLine().trim();
     }
 }
